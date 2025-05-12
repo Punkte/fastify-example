@@ -1,0 +1,20 @@
+services:
+  backend:
+    build: .
+    ports:
+      - 8080:3001
+      - 9229:9229
+    networks:
+      - pyroscope
+    volumes:
+      - .:/usr/app/
+      - /usr/app/node_modules
+    command: npm start
+  pyroscope:
+    image: grafana/pyroscope
+    ports:
+      - "4040:4040"
+    networks:
+      - pyroscope
+networks:
+  pyroscope: {}
