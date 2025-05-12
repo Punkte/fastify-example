@@ -1,6 +1,6 @@
 import fastify from 'fastify'
 import Pyroscope from '@pyroscope/nodejs'
-import computeHeavyHash from './computeHash.ts';
+import computeHeavyHash from './computeHash.js';
 
 const server = fastify()
 
