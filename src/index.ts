@@ -4,8 +4,11 @@ import computeHeavyHash from './computeHash.js';
 
 const server = fastify()
 
+const pyroscopeHost = process.env.PYROSCOPE_HOST || 'pyroscope';
+const pyroscopePort = process.env.PYROSCOPE_PORT || 4040;
+
 Pyroscope.init({
-    serverAddress: 'http://pyroscope:4040',
+    serverAddress: `http://${pyroscopeHost}:${pyroscopePort}`,
     appName: 'fastify',
     // Enable CPU time collection for wall profiles
     // This is required for CPU profiling functionality
@@ -16,11 +19,11 @@ Pyroscope.init({
 
 Pyroscope.start()
 
-server.get('/', async (request, reply) => {
+server.get('/', async (_, __) => {
   return 'Hello world\n'
 })
 
-server.get('/heavy-computation', async (request, reply) => {
+server.get('/heavy-computation', async (_, __) => {
   const iterations = 10_000_000;
   return computeHeavyHash(iterations)
 })
