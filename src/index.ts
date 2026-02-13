@@ -7,14 +7,18 @@ const server = fastify()
 const pyroscopeHost = process.env.PYROSCOPE_HOST || 'pyroscope';
 const pyroscopePort = process.env.PYROSCOPE_PORT || 4040;
 
+const serverAddress = process.env.PYROSCOPE_SERVER ?? `http://${pyroscopeHost}:${pyroscopePort}`
+
 Pyroscope.init({
-    serverAddress: `http://${pyroscopeHost}:${pyroscopePort}`,
+    serverAddress,
     appName: 'fastify',
     // Enable CPU time collection for wall profiles
     // This is required for CPU profiling functionality
     wall: {
       collectCpuTime: true
-    }
+    },
+    basicAuthUser: process.env.PYROSCOPE_BASIC_AUTH_USER,
+    basicAuthPassword: process.env.PYROSCOPE_BASIC_AUTH_PASSWORD,
 });
 
 Pyroscope.start()
