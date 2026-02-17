@@ -1,6 +1,7 @@
 import fastify from 'fastify'
 import Pyroscope from '@pyroscope/nodejs'
 import computeHeavyHash from './computeHash.js';
+import { generateMockData } from './dateFormatter.js';
 
 const server = fastify()
 
@@ -25,6 +26,10 @@ Pyroscope.start()
 
 server.get('/', async (_, __) => {
   return 'Hello world\n'
+})
+
+server.get('/dates', async (_, __) => {
+  return generateMockData(1000);
 })
 
 server.get('/heavy-computation', async (_, __) => {

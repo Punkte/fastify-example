@@ -9,7 +9,6 @@ services:
     volumes:
       - .:/usr/app/
       - /usr/app/node_modules
-    command: npm start
   pyroscope:
     image: grafana/pyroscope
     ports:
