@@ -2,6 +2,8 @@ import fastify from 'fastify'
 import Pyroscope from '@pyroscope/nodejs'
 import computeHeavyHash from './computeHash.js';
 import { generateMockData } from './dateFormatter.js';
+import metricsPlugin from 'fastify-metrics';
+import client from 'prom-client';
 
 const server = fastify()
 
@@ -13,8 +15,6 @@ const serverAddress = process.env.PYROSCOPE_SERVER ?? `http://${pyroscopeHost}:$
 Pyroscope.init({
     serverAddress,
     appName: 'fastify',
-    // Enable CPU time collection for wall profiles
-    // This is required for CPU profiling functionality
     wall: {
       collectCpuTime: true
     },
@@ -36,6 +36,11 @@ server.get('/heavy-computation', async (_, __) => {
   const iterations = 10_000_000;
   return computeHeavyHash(iterations)
 })
+
+server.register(metricsPlugin, {
+  endpoint: '/metrics',
+  promClient: client,
+});
 
 server.listen({ port: 3001, host: '0.0.0.0' }, (err, address) => {
   if (err) {
